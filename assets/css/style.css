@@ -1,0 +1,172 @@
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  letter-spacing: -0.04em;
+  box-sizing: border-box;
+  outline: none;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Nanum Gothic", sans-serif;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  display: block;
+  border: none;
+  background: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+input, textarea {
+  border: 1px solid #252525;
+  border-radius: 0;
+  padding: 0 10px;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #222;
+}
+
+[class*=fa-] {
+  vertical-align: middle;
+}
+
+[type=checkbox] {
+  display: none !important;
+}
+[type=checkbox] + label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+[type=checkbox] + label .check_ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #252525;
+  margin-right: 5px;
+  flex: 0 0 auto;
+  transition: background 0.3s ease;
+  align-self: flex-start;
+}
+[type=checkbox] + label .check_ico i {
+  display: block;
+  font-size: 15px;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+[type=checkbox] + label .txt {
+  display: block;
+  font-size: 15px;
+  color: #222;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+[type=checkbox]:checked + label .check_ico {
+  background: #222;
+}
+[type=checkbox]:checked + label .check_ico i {
+  opacity: 1;
+}
+
+.todolist {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 500px;
+  height: 80%;
+  padding: 5px;
+  background: #fff;
+}
+.todolist .header {
+  margin-bottom: 5px;
+  padding: 10px 5px;
+  border: 2px solid #222;
+}
+.todolist .header .ttl {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.todolist .body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 90%;
+  padding: 5px;
+  border: 2px solid #222;
+  flex: 1 1 auto;
+}
+.todolist .body .add_box {
+  display: flex;
+  align-items: center;
+  height: 55px;
+  padding: 5px 5px 10px;
+  border-bottom: 2px solid #222;
+}
+.todolist .body .add_box .add_input {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+.todolist .body .add_box .add_btn {
+  width: 50px;
+  height: 100%;
+  margin-left: 5px;
+  background: #222;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+.todolist .body .list_box {
+  padding: 5px;
+  overflow-y: auto;
+}
+.todolist .body .list_box li {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid #252525;
+  margin-bottom: 5px;
+}
+.todolist .body .list_box li .cont {
+  align-self: center;
+  padding-right: 10px;
+}
+.todolist .body .list_box li .util {
+  display: flex;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+.todolist .body .list_box li .util button {
+  display: block;
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+}
+.todolist .body .list_box li .util button + button {
+  margin-left: 4px;
+}
+
+/*# sourceMappingURL=style.css.map */

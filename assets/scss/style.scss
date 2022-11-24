@@ -48,7 +48,7 @@ body {
             font-size: 15px;
             color: #222;
             line-height: 1.3;
-            word-break: keep-all;
+            word-break: break-all;
         }
 
     }
@@ -63,9 +63,56 @@ body {
                 }
 
             }
+
+            .txt {
+                color: #888;
+                text-decoration: line-through;
+            }
         }
     }
 
+}
+
+.input_item {
+    display: flex;
+    align-items: center;
+    height: 40px;
+
+    input {
+        display: block;
+        width: 100%;
+        height: 100%;
+        font-size: 16px;
+    }
+    
+    .btn {
+        display: block;
+        width: 100%;
+        max-width: 50px;
+        height: 100%;
+        margin-left: 5px;
+        font-weight: 700;
+        flex: 0 0 auto;
+
+        & + .btn {
+            margin-left: 5px;
+        }
+
+        &.bg_black {
+            background: #222;
+            color: #fff;
+        }
+
+        &.line_black {
+            border: 1px solid #222;
+        }
+
+        i {
+            font-size: 20px;
+        }
+
+    }
+    
 }
 
 .todolist {
@@ -98,30 +145,10 @@ body {
         border: 2px solid #222;
         flex: 1 1 auto;
 
-        .add_box {
-            display: flex;
-            align-items: center;
-            height: 55px;
+        .type_add {
             padding: 5px 5px 10px;
             border-bottom: 2px solid #222;
-
-            .add_input {
-                display: block;
-                width: 100%;
-                height: 100%;
-                font-size: 16px;
-            }
-
-            .add_btn {
-                width: 50px;
-                height: 100%;
-                margin-left: 5px;
-                background: #222;
-                color: #fff;
-                font-size: 20px;
-                font-weight: 700;
-                flex: 0 0 auto;
-            }
+            height: 55px;
 
         }
 
@@ -130,31 +157,40 @@ body {
             overflow-y: auto;
 
             li {
-                display: flex;
-                align-items: flex-start;
+                
                 padding: 10px 0;
                 border-bottom: 1px solid #252525;
-                margin-bottom: 5px;
 
-                .cont {
-                    align-self: center;
-                    padding-right: 10px;
+                .view_item {
+                    display: flex;
+                    align-items: flex-start;
+
+                    .cont {
+                        align-self: center;
+                        padding-right: 10px;
+                    }
+
+                    .util {
+                        display: flex;
+                        margin-left: auto;
+                        flex: 0 0 auto;
+
+                        button {
+                            display: block;
+                            width: 25px;
+                            height: 25px;
+                            font-size: 18px;
+
+                            + button {
+                                margin-left: 4px;
+                            }
+                        }
+                    }
                 }
 
-                .util {
-                    display: flex;
-                    margin-left: auto;
-                    flex: 0 0 auto;
-
-                    button {
-                        display: block;
-                        width: 25px;
-                        height: 25px;
-                        font-size: 18px;
-
-                        + button {
-                            margin-left: 4px;
-                        }
+                &.complete {
+                    .util {
+                        display: none;
                     }
                 }
 

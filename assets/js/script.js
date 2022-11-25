@@ -154,15 +154,11 @@
         const viewItem = target.querySelector('.view_item');
         const viewItemTxt = viewItem.querySelector('.txt');
         const Modify = target.querySelector('.type_modify');
-        const txt = Modify.querySelector('.modify_input').value;
-        const checkItem = target.querySelector('input[type="checkbox"]');
-        const key = checkItem.id.split('todo')[1];
 
         Modify.remove();
         viewItem.style.display = 'flex';
-        viewItemTxt.innerText = txt;
+        viewItemTxt.innerText = Modify.querySelector('.modify_input').value;
 
-        setStorage(key, txt, checkItem.checked);
     }
 
     // 수정폼 오픈

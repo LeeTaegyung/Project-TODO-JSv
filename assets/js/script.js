@@ -3,6 +3,11 @@
     const addBtn = document.querySelector('.add_btn');
     addBtn.addEventListener('click', todoAdd);
 
+    const them = document.querySelector('input[type="color"]');
+    them.addEventListener('input', () => {
+        console.log(them.value);
+    })
+
     init();
 
     document.addEventListener('click', (e) => {

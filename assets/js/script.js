@@ -1,7 +1,19 @@
 (()=>{
-    console.log('to do list!');
     const addBtn = document.querySelector('.add_btn');
+    const themeBtn = document.querySelector('.theme_custom_btn');
+    const themInput = document.getElementById('theme_custom_input');
     addBtn.addEventListener('click', todoAdd);
+
+    // 테마 설정 열고/닫기
+    themeBtn.addEventListener('click', themShowHide);
+    themInput.addEventListener('blur', themShowHide);
+
+    // 테마 설정
+    themInput.addEventListener('input', ({target}) => {
+        let value = target.value;
+        document.documentElement.style.setProperty('--primary-color', value);
+        localStorage.setItem('theme', value);
+    });
 
     init();
 
@@ -35,19 +47,23 @@
 
     })
 
+
     function init() {
         if(localStorage.length > 0) {
+            // 테마 설정 적용
+            if(localStorage.getItem('theme')) {
+                document.documentElement.style.setProperty('--primary-color', localStorage.getItem('theme'));
+                themInput.value = localStorage.getItem('theme');
+            }
             // localStorage 키값이 제대로 정렬되지 않는 문제가 있어서 count키를 제외한 key만 따로 담아 정렬.
             let keys = [];
             for(let i = 0; i < localStorage.length; i++) {
-                if(localStorage.key(i) === 'count') continue;
+                if(localStorage.key(i) === 'count' || localStorage.key(i) === 'theme') continue;
                 keys.push(+localStorage.key(i));
             }
 
             // sort 
             keys.sort((a, b) => a - b);
-
-            console.log(keys);
 
             for(let i = 0; i < keys.length; i++) {
                 let item = JSON.parse(localStorage.getItem(keys[i]));
@@ -56,6 +72,12 @@
         } else {
             localStorage.setItem('count', 0);
         }
+    }
+
+    function themShowHide() {
+        let displayOpt;
+        displayOpt = (themInput.style.display == 'block') ? 'none' : 'block';
+        themInput.style.display = displayOpt;
     }
 
     // 스토리지 추가 / 업데이트
@@ -181,12 +203,6 @@
         Modify.remove();
         viewItem.style.display = 'flex';
     }
-
-
-
-
-// - 할일 순서 바꾸기  :: 이건 나중에 시간되면,
-
 
 
 })()

@@ -157,10 +157,10 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 90%;
   padding: 5px;
   border: 2px solid var(--primary-color);
   flex: 1 1 auto;
+  overflow: hidden;
 }
 .todolist .body .type_add {
   padding: 5px 5px 10px;
@@ -170,6 +170,7 @@ body {
 .todolist .body .list_box {
   padding: 5px;
   overflow-y: auto;
+  flex: 1;
 }
 .todolist .body .list_box li {
   padding: 10px 0;
@@ -179,7 +180,7 @@ body {
   display: flex;
   align-items: flex-start;
 }
-.todolist .body .list_box li .view_item .cont {
+.todolist .body .list_box li .view_item .check_item {
   align-self: center;
   padding-right: 10px;
 }
@@ -199,6 +200,80 @@ body {
 }
 .todolist .body .list_box li.complete .util {
   display: none;
+}
+.todolist .body .state_row {
+  display: flex;
+  border-top: 2px solid var(--primary-color);
+  padding: 5px;
+}
+.todolist .body .state_row button {
+  position: relative;
+  display: block;
+  padding: 6px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--primary-color);
+  flex: 1;
+}
+.todolist .body .state_row button + button {
+  margin-left: 5px;
+}
+.todolist .body .state_row button::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--primary-color);
+  opacity: 0.5;
+  transition: all 0.3s 0.2s;
+  content: "";
+}
+.todolist .body .state_row button::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--primary-color);
+  transition: all 0.3s;
+  content: "";
+}
+.todolist .body .state_row button:hover {
+  color: #fff;
+}
+.todolist .body .state_row button:hover::before {
+  width: 100%;
+  right: auto;
+  left: 0;
+  transition: all 0.3s;
+}
+.todolist .body .state_row button:hover::after {
+  width: 100%;
+  right: auto;
+  left: 0;
+  transition: all 0.3s 0.2s;
+}
+.todolist .body .state_row button.on {
+  color: #fff;
+}
+.todolist .body .state_row button.on::before {
+  width: 100%;
+  right: auto;
+  left: 0;
+  transition: all 0.3s;
+}
+.todolist .body .state_row button.on::after {
+  width: 100%;
+  right: auto;
+  left: 0;
+  transition: all 0.3s 0.2s;
+}
+.todolist .body .state_row button span {
+  position: relative;
+  z-index: 1;
+  color: inherit;
+  transition: all 0.5s;
 }
 
 .theme_custom {

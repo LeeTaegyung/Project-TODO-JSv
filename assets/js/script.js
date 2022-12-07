@@ -1,8 +1,15 @@
 (()=>{
     const addBtn = document.querySelector('.add_btn');
+    const addInput = document.querySelector('.add_input');
     const themeBtn = document.querySelector('.theme_custom_btn');
     const themInput = document.getElementById('theme_custom_input');
+    const stateBtn = document.querySelectorAll('.state_btn');
     addBtn.addEventListener('click', todoAdd);
+    addInput.addEventListener('keydown', (e) => {
+        if(e.key == 'Enter') {
+            todoAdd();
+        }
+    })
 
     // 테마 설정 열고/닫기
     themeBtn.addEventListener('click', themShowHide);
@@ -47,6 +54,50 @@
 
     })
 
+    // 상태별로 보여주기
+    stateBtn.forEach(ele => {
+        ele.addEventListener('click', function(){
+            stateBtn.forEach(ele => {
+                ele.classList.remove('on');
+            })
+            ele.classList.add('on');
+            todoState(this.dataset.state);
+        })
+    })
+
+    // 상태별 보여주기 함수
+    function todoState(state) {
+        const list = document.querySelector('.list');
+        let checkState;
+        switch(state) {
+            case 'do':
+                checkState = false;
+                break;
+            case 'done':
+                checkState = true;
+                break;
+            case 'all':
+                checkState = undefined;
+                break;
+        }
+
+        // 리스트 초기화
+        list.innerHTML = '';
+            
+        let keys = keysSort();
+
+        for(let i = 0; i < keys.length; i++) {
+            let item = JSON.parse(localStorage.getItem(keys[i]));
+
+            if(checkState == undefined) {
+                todoCreate(keys[i], item.txt, item.check);
+            } else {
+                if(item.check == checkState) todoCreate(keys[i], item.txt, item.check);
+            }
+        }
+
+    }
+
 
     function init() {
         if(localStorage.length > 0) {
@@ -55,15 +106,8 @@
                 document.documentElement.style.setProperty('--primary-color', localStorage.getItem('theme'));
                 themInput.value = localStorage.getItem('theme');
             }
-            // localStorage 키값이 제대로 정렬되지 않는 문제가 있어서 count키를 제외한 key만 따로 담아 정렬.
-            let keys = [];
-            for(let i = 0; i < localStorage.length; i++) {
-                if(localStorage.key(i) === 'count' || localStorage.key(i) === 'theme') continue;
-                keys.push(+localStorage.key(i));
-            }
-
-            // sort 
-            keys.sort((a, b) => a - b);
+            
+            let keys = keysSort();
 
             for(let i = 0; i < keys.length; i++) {
                 let item = JSON.parse(localStorage.getItem(keys[i]));
@@ -73,6 +117,22 @@
             localStorage.setItem('count', 0);
         }
     }
+
+    // 키값 정렬
+    function keysSort() {
+        // localStorage 키값이 제대로 정렬되지 않는 문제가 있어서 count키를 제외한 key만 따로 담아 정렬.
+        let keys = [];
+        for(let i = 0; i < localStorage.length; i++) {
+            if(localStorage.key(i) === 'count' || localStorage.key(i) === 'theme') continue;
+            keys.push(+localStorage.key(i));
+        }
+
+        // sort 
+        keys.sort((a, b) => a - b);
+
+        return keys;
+    }
+
 
     function themShowHide() {
         let displayOpt;
@@ -98,7 +158,7 @@
         }
 
         const temp = `<div class="view_item">
-                            <div class="cont">
+                            <div class="check_item">
                                 <input type="checkbox" name="" id="todo${key}" ${check}>
                                 <label for="todo${key}">
                                     <span class="check_ico">
@@ -124,12 +184,12 @@
 
     // 추가하기
     function todoAdd() {
-        const addInput = document.querySelector('.add_input');
         const txt = addInput.value;
         const key = +localStorage.getItem('count');
 
         // 스토리지에 있는 count를 기준으로 키값 부여.
         // 이렇게 하지 않고 length로 하게 될 경우, 기존의 키값을 덮어씌우는 일이 발생함.
+        if(!(txt.length > 0)) return;
 
         todoCreate(key, txt, false);
         setStorage(key, txt, false);
@@ -168,13 +228,16 @@
     
     // 수정 하기
     function todoModify(target) {
+        let key = target.querySelector('input[type="checkbox"]').id;
         const viewItem = target.querySelector('.view_item');
         const viewItemTxt = viewItem.querySelector('.txt');
         const Modify = target.querySelector('.type_modify');
+        key = key.split('todo')[1];
 
         Modify.remove();
         viewItem.style.display = 'flex';
         viewItemTxt.innerText = Modify.querySelector('.modify_input').value;
+        setStorage(key, viewItemTxt.innerText, false);
 
     }
 

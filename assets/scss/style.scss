@@ -147,10 +147,10 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        height: 90%;
         padding: 5px;
         border: 2px solid var(--primary-color);
         flex: 1 1 auto;
+        overflow: hidden;
 
         .type_add {
             padding: 5px 5px 10px;
@@ -162,6 +162,7 @@ body {
         .list_box {
             padding: 5px;
             overflow-y: auto;
+            flex: 1;
 
             li {
                 
@@ -172,7 +173,7 @@ body {
                     display: flex;
                     align-items: flex-start;
 
-                    .cont {
+                    .check_item {
                         align-self: center;
                         padding-right: 10px;
                     }
@@ -199,6 +200,93 @@ body {
                     .util {
                         display: none;
                     }
+                }
+
+            }
+        }
+
+        .state_row {
+            display: flex;
+            border-top: 2px solid var(--primary-color);
+            padding: 5px;
+
+            button {
+                position: relative;
+                display: block;
+                padding: 6px;
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--primary-color);
+                flex: 1;
+
+                & + button {
+                    margin-left: 5px;
+                }
+
+                &::before {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 0;
+                    background: var(--primary-color);
+                    opacity: 0.5;
+                    transition: all .3s .2s;
+                    content: '';
+                }
+
+                &::after {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 0;
+                    background: var(--primary-color);
+                    transition: all .3s;
+                    content: '';
+                }
+
+                &:hover {
+                    color: #fff;
+
+                    &::before {
+                        width: 100%;
+                        right: auto;
+                        left: 0;
+                        transition: all .3s;
+                    }
+
+                    &::after {
+                        width: 100%;
+                        right: auto;
+                        left: 0;
+                        transition: all .3s .2s;
+                    }
+
+                }
+                
+                &.on {
+                    color: #fff;
+
+                    &::before {
+                        width: 100%;
+                        right: auto;
+                        left: 0;
+                        transition: all .3s;
+                    }
+                    &::after {
+                        width: 100%;
+                        right: auto;
+                        left: 0;
+                        transition: all .3s .2s;
+                    }
+                }
+
+                span {
+                    position: relative;
+                    z-index: 1;
+                    color: inherit;
+                    transition: all .5s;
                 }
 
             }

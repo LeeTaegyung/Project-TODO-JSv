@@ -247,7 +247,6 @@
 
     // 상태별 분류
     document.querySelector('.state_row').addEventListener('click', function({target}){
-        const stateBtn = document.querySelectorAll('.state_btn');
         let targetItem = target.closest('.state_btn');
         if(targetItem) {
             stateBtn.forEach(ele => {

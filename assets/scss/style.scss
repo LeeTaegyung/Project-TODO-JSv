@@ -176,6 +176,7 @@ body {
                     .check_item {
                         align-self: center;
                         padding-right: 10px;
+                        flex: 1;
                     }
 
                     .util {
@@ -193,6 +194,14 @@ body {
                                 margin-left: 4px;
                             }
                         }
+                    }
+                    .move_btn {
+                        display: block;
+                        width: 25px;
+                        height: 25px;
+                        font-size: 18px;
+                        margin-left: 4px;
+                        flex: 0 0 auto;
                     }
                 }
 

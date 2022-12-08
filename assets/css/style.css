@@ -183,6 +183,7 @@ body {
 .todolist .body .list_box li .view_item .check_item {
   align-self: center;
   padding-right: 10px;
+  flex: 1;
 }
 .todolist .body .list_box li .view_item .util {
   display: flex;
@@ -197,6 +198,14 @@ body {
 }
 .todolist .body .list_box li .view_item .util button + button {
   margin-left: 4px;
+}
+.todolist .body .list_box li .view_item .move_btn {
+  display: block;
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  margin-left: 4px;
+  flex: 0 0 auto;
 }
 .todolist .body .list_box li.complete .util {
   display: none;

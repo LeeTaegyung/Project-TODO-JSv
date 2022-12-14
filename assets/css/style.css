@@ -173,8 +173,9 @@ body {
   flex: 1;
 }
 .todolist .body .list_box li {
-  padding: 10px 0;
+  padding: 10px 5px;
   border-bottom: 1px solid var(--primary-color);
+  background: #fff;
 }
 .todolist .body .list_box li .view_item {
   display: flex;
@@ -209,6 +210,13 @@ body {
 }
 .todolist .body .list_box li.complete .util {
   display: none;
+}
+.todolist .body .list_box li.blank {
+  opacity: 0.5;
+}
+.todolist .body .list_box li.clone {
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.5);
 }
 .todolist .body .state_row {
   display: flex;

@@ -70,7 +70,8 @@
 
             const id = +localStorage.getItem('count');
             const check = false;
-            const listItem = {id, txt, check};
+            const order = id;
+            const listItem = {id, txt, check, order};
 
             if(localStorage.getItem('list')) {
                 list = JSON.parse(localStorage.getItem('list'));
@@ -97,22 +98,22 @@
             localStorage.setItem('list', JSON.stringify(list));
 
         },
-        fnComplete: function(target){ // 완료
-            if(target) {
-                list = JSON.parse(localStorage.getItem('list'));
-                const checkItem = target.querySelector('input[type="checkbox"]');
-                const checkItemId = checkItem.id.split('todo')[1];
-                const changeItem = list.findIndex(ele => ele.id == checkItemId);
+        fnCheckChange: function(target){ // 완료
+            list = JSON.parse(localStorage.getItem('list'));
+            const checkItemId = target.id.split('todo')[1];
+            const changeItem = list.findIndex(ele => ele.id == checkItemId);
 
-                if(checkItem.checked) {
-                    target.classList.add('complete');
-                } else {
-                    target.classList.remove('complete');
-                }
-                list[changeItem].check = checkItem.checked;
-                
-                localStorage.setItem('list', JSON.stringify(list));
+            if(target.checked) {
+                target.closest('li').classList.add('complete');
+            } else {
+                target.closest('li').classList.remove('complete');
             }
+            list[changeItem].check = target.checked;
+            
+            localStorage.setItem('list', JSON.stringify(list));
+
+            // update
+            this.fnState();
         },
         fnModify: function(target){ // 수정
             list = JSON.parse(localStorage.getItem('list'));
@@ -154,12 +155,9 @@
 
         },
         fnState: function(state) { // 상태별 분류
-            console.log(state);
             let checkState;
             let stateList;
             state = (state === undefined) ? document.querySelector('.state_btn.on').dataset.state : state;
-            console.log(state);
-
             switch(state) {
                 case 'do':
                     checkState = false;
@@ -184,12 +182,7 @@
             })
 
         },
-        fnInit: function(){
-            //addBtn.addEventListener('click', todo.fnAdd.bind(this));
-        }
     }
-    
-    todo.fnInit();
 
     function init() {
         // 테마 설정 적용
@@ -217,11 +210,16 @@
         if(e.key == 'Enter') todo.fnAdd();
     })
 
-    // 생성된 요소에 대한 이벤트
+    // 생성된 요소에 대한 change 이벤트
+    document.addEventListener('change', function({target}){
+        if(target.getAttribute('type') === 'checkbox') {
+            todo.fnCheckChange(target);
+        }
+    })
+
+    // 생성된 요소에 대한 click 이벤트
     document.addEventListener('click', function({target}){
         let targetItem = target.closest('li');
-
-        todo.fnComplete(targetItem);
 
         // 삭제
         if(target.closest('.del_btn')) {
@@ -244,6 +242,130 @@
         }
 
     })
+
+    function itemMove() {
+        let targetItem, cloneItem, moveBtnWidth, originIdx, changeIdx;
+
+        function mouseMove(e) {
+            let top = e.clientY - targetItem.offsetHeight / 2;
+            let left = e.clientX - targetItem.offsetWidth + moveBtnWidth;
+            
+            // 커서 위치에 따라 복사한 요소 이동
+            cloneItem.style.top = top + 'px';
+            cloneItem.style.left = left + 'px';
+
+            // 각 리스트 아이템의 중간 위치값 저장
+            const LI = document.querySelectorAll('.list li');
+            const liOffset = [];
+            for(let i = 0; i < LI.length; i++) {
+                // 클론 클래스값을 가진 li를 제외한 위치값 저장
+                if(!(LI[i].classList.contains('clone'))) {
+                    liOffset.push(LI[i].getBoundingClientRect().top + (LI[i].getBoundingClientRect().height / 2));
+                }
+            }
+            
+            // 현재 커서의 위치보다 아래에 있는 요소의 첫번째 인덱스값 추출
+            let targetIdx = liOffset.findIndex(ele => e.clientY <= ele);
+            if(targetIdx >= 0) {
+                todoList.insertBefore(targetItem, LI[targetIdx]);
+            } else { // 인덱스값이 -1이면(찾지 못하면) 제일 뒤에 이동해주기.
+                todoList.appendChild(targetItem);
+            }
+
+        }
+
+        function mouseDown(e) {
+            const target = e.target;
+            if(target.closest('.move_btn')) {
+                targetItem = e.target.closest('li');
+                cloneItem = targetItem.cloneNode(true);  //요소 복사
+                moveBtnWidth = e.target.closest('.move_btn').offsetWidth;
+
+                // 클래스 및 복사 요소 추가
+                targetItem.classList.add('blank');
+                todoList.append(cloneItem);
+                cloneItem.classList.add('clone');
+    
+                // 복사한 요소 스타일 지정
+                cloneItem.style.position = 'fixed';
+                cloneItem.style.top = (e.clientY - targetItem.offsetHeight / 2) + 'px';
+                cloneItem.style.left = (e.clientX - targetItem.offsetWidth + moveBtnWidth) + 'px';
+                cloneItem.style.width = targetItem.offsetWidth + 'px';
+
+                // 선택한 요소의 order 값 추출
+                list.forEach(ele => {
+                    if(ele.id == targetItem.querySelector('input[type="checkbox"]').id.split('todo')[1]) {
+                        originIdx = ele.order;
+                    }
+                })
+                
+                // mouse move 이벤트 실행
+                document.addEventListener('mousemove', mouseMove);
+            }
+        }
+
+        function mouseUp(e) {
+
+            if(cloneItem) {
+                targetItem.classList.remove('blank');
+                cloneItem.remove();
+
+                const LI = document.querySelectorAll('.list li');
+                LI.forEach((ele, idx) => {
+                    if(ele == targetItem) {
+                        changeIdx =  idx;
+                    }
+                })
+
+                // localStorage 저장
+                list[originIdx].order = changeIdx;
+                let orderStep = originIdx - changeIdx;
+                if(orderStep >= 0) {
+
+                    for(let i = changeIdx; i < originIdx; i++) {
+                        list[i].order = i + 1;
+                    }
+                } else {
+                    forStart = changeIdx;
+                    forEnd = originIdx;
+                    
+                    for(let i = forStart; i > forEnd; i--) {
+                        list[i].order = i - 1;
+                    }
+                }
+
+                // order 순으로 정렬
+                const dupleList = [];
+                for(let i = 0; i < list.length; i++) {
+                    let filterItem = list.filter(ele => ele.order == i);
+                    dupleList.push(...filterItem);
+                }
+                list = dupleList;
+
+                // order 순으로 다시 저장
+                localStorage.setItem('list', JSON.stringify(list));
+
+                
+                // 요소 초기화
+                targetItem = undefined;
+                cloneItem = undefined;
+
+
+                // 순서 확인을 위한 인덱스값 초기화
+                originIdx = undefined;
+                changeIdx = undefined;
+
+            }
+    
+            // mouse move 이벤트 삭제
+            document.removeEventListener('mousemove', mouseMove);
+        }
+
+        document.addEventListener('mousedown', mouseDown);
+        document.addEventListener('mouseup', mouseUp)
+
+    }
+    itemMove();
 
     // 상태별 분류
     document.querySelector('.state_row').addEventListener('click', function({target}){

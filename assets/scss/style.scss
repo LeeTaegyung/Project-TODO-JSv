@@ -166,8 +166,9 @@ body {
 
             li {
                 
-                padding: 10px 0;
+                padding: 10px 5px;
                 border-bottom: 1px solid var(--primary-color);
+                background: #fff;
 
                 .view_item {
                     display: flex;
@@ -209,6 +210,15 @@ body {
                     .util {
                         display: none;
                     }
+                }
+
+                &.blank {
+                    opacity: 0.5;
+                }
+
+                &.clone {
+                    border: 1px solid var(--primary-color);
+                    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.5);
                 }
 
             }

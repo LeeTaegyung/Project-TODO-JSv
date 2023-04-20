@@ -90,9 +90,7 @@
             list = JSON.parse(localStorage.getItem('list'));
 
             const targetId = target.querySelector('input[type="checkbox"]').id.split('todo')[1];
-            list = list.filter(ele => {
-                return !(ele.id == targetId);
-            })
+            list = list.filter(ele => !(ele.id == targetId));
 
             target.remove();
             localStorage.setItem('list', JSON.stringify(list));
@@ -189,9 +187,8 @@
         if(localStorage.getItem('theme')) theme.fnInit();
 
         // count 값 없으면, 초기화
-        if(!localStorage.getItem('count')) {
-            localStorage.setItem('count', 0);
-        }
+        !localStorage.getItem('count') && localStorage.setItem('count', 0);
+
         // list 값 있으면, localStorage에서 불러오기
         if(localStorage.getItem('list')) {
             list = JSON.parse(localStorage.getItem('list'));
@@ -199,6 +196,7 @@
                 todo.fnCreate(ele);
             })
         }
+        
     }
 
     init();
@@ -292,12 +290,20 @@
                 cloneItem.style.left = (e.clientX - targetItem.offsetWidth + moveBtnWidth) + 'px';
                 cloneItem.style.width = targetItem.offsetWidth + 'px';
 
-                // 선택한 요소의 order 값 추출
-                list.forEach(ele => {
-                    if(ele.id == targetItem.querySelector('input[type="checkbox"]').id.split('todo')[1]) {
-                        originIdx = ele.order;
+                console.log(targetItem);
+                document.querySelectorAll('.list li').forEach((ele, idx) => {
+                    if(ele === targetItem) {
+                        console.log('current : ' + idx);
+                        originIdx = idx;
                     }
                 })
+
+                // 선택한 요소의 order 값 추출
+                // list.forEach(ele => {
+                //     if(ele.id == targetItem.querySelector('input[type="checkbox"]').id.split('todo')[1]) {
+                //         originIdx = ele.order;
+                //     }
+                // })
                 
                 // mouse move 이벤트 실행
                 document.addEventListener('mousemove', mouseMove);
@@ -313,34 +319,44 @@
                 const LI = document.querySelectorAll('.list li');
                 LI.forEach((ele, idx) => {
                     if(ele == targetItem) {
-                        changeIdx =  idx;
+                        console.log('change : ' + idx);
+                        changeIdx = idx;
                     }
                 })
 
-                // localStorage 저장
-                list[originIdx].order = changeIdx;
-                let orderStep = originIdx - changeIdx;
-                if(orderStep >= 0) {
+                // move를 이렇게 수정을 하면 될거 같음.
+                console.log(list)
+                const targetIdx = list.findIndex(ele => ele === list[originIdx]);
+                const filterArr = list.filter(ele => ele !== list[targetIdx]);
+                const filteritem = list.slice(targetIdx, targetIdx + 1);
+                filterArr.splice(changeIdx, 0, ...filteritem);
+                list = filterArr;
+                console.log(filteritem);
 
-                    for(let i = changeIdx; i < originIdx; i++) {
-                        list[i].order = i + 1;
-                    }
-                } else {
-                    forStart = changeIdx;
-                    forEnd = originIdx;
+                // // localStorage 저장
+                // list[originIdx].order = changeIdx;
+                // let orderStep = originIdx - changeIdx;
+                // if(orderStep >= 0) {
+
+                //     for(let i = changeIdx; i < originIdx; i++) {
+                //         list[i].order = i + 1;
+                //     }
+                // } else {
+                //     forStart = changeIdx;
+                //     forEnd = originIdx;
                     
-                    for(let i = forStart; i > forEnd; i--) {
-                        list[i].order = i - 1;
-                    }
-                }
+                //     for(let i = forStart; i > forEnd; i--) {
+                //         list[i].order = i - 1;
+                //     }
+                // }
 
-                // order 순으로 정렬
-                const dupleList = [];
-                for(let i = 0; i < list.length; i++) {
-                    let filterItem = list.filter(ele => ele.order == i);
-                    dupleList.push(...filterItem);
-                }
-                list = dupleList;
+                // // order 순으로 정렬
+                // const dupleList = [];
+                // for(let i = 0; i < list.length; i++) {
+                //     let filterItem = list.filter(ele => ele.order == i);
+                //     dupleList.push(...filterItem);
+                // }
+                // list = dupleList;
 
                 // order 순으로 다시 저장
                 localStorage.setItem('list', JSON.stringify(list));
@@ -365,7 +381,7 @@
         document.addEventListener('mouseup', mouseUp)
 
     }
-    itemMove();
+    // itemMove();
 
     // 상태별 분류
     document.querySelector('.state_row').addEventListener('click', function({target}){

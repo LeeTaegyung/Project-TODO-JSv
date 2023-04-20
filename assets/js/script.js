@@ -67,8 +67,7 @@
 
             const id = +localStorage.getItem('count');
             const check = false;
-            const order = id;
-            const listItem = {id, txt, check, order};
+            const listItem = {id, txt, check};
 
             if(localStorage.getItem('list')) {
                 list = JSON.parse(localStorage.getItem('list'));
